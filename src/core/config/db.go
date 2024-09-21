@@ -4,8 +4,15 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
+	"gorm.io/gorm"
 	log "template/src/utils/logs"
 )
+
+var db *gorm.DB
+
+func GetDB() *gorm.DB {
+	return db
+}
 
 func CheckDBConnection(dbURL string) {
 	db, err := sql.Open("postgres", dbURL)

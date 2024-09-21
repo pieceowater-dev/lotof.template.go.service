@@ -9,7 +9,7 @@ import (
 
 func main() {
 	log.InitLogger()
-	_, port, _, _ := config.Setup()
+	port, _, _, _ := config.Setup()
 	router := gin.Default()
 
 	items.Init(router)

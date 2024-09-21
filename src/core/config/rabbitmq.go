@@ -6,6 +6,12 @@ import (
 	log "template/src/utils/logs"
 )
 
+var rabbitMQ *amqp.Connection
+
+func GetRabbitMQConnection() *amqp.Connection {
+	return rabbitMQ
+}
+
 func CheckRabbitMQConnection(rabbitmqURL string) {
 	conn, err := amqp.Dial(rabbitmqURL)
 	if err != nil {
