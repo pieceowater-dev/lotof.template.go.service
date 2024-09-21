@@ -6,14 +6,7 @@ import (
 )
 
 func Setup() {
-	log.InitLogger()
-
-	env.LoadEnv()
-
-	requiredVars := []string{"RABBITMQ_URL", "DATABASE_URL"}
-	if err := env.CheckRequiredEnv(requiredVars); err != nil {
-		log.Error(err, nil)
-	}
+	SetupEnv()
 
 	port := env.GetEnvOrDefault("PORT", "3003")
 	mode := env.GetEnvOrDefault("MODE", "dev")
@@ -27,4 +20,7 @@ func Setup() {
 		"DB":   dbURL,
 		"MQ":   rabbitmqURL,
 	})
+
+	CheckDBConnection(dbURL)
+	CheckRabbitMQConnection(rabbitmqURL)
 }
