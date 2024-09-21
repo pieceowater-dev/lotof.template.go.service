@@ -1,9 +1,7 @@
 package main
 
-import (
-	log "template/src/core/logs"
-)
+import "template/src/core/config"
 
 func main() {
-	log.InitLogger()
+	config.Setup()
 }
