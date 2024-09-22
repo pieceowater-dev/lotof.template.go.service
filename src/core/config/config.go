@@ -40,8 +40,5 @@ func Setup() (string, string, *gorm.DB, *amqp.Connection) {
 		log.Error(fmt.Errorf("failed to connect to RabbitMQ: %w", err), nil)
 	}
 
-	CheckDBConnection(dbURL)
-	CheckRabbitMQConnection(rabbitmqURL)
-
 	return port, mode, db, rabbitmqConn
 }
