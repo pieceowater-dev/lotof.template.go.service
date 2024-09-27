@@ -16,7 +16,8 @@ func main() {
 			log.Println("Failed to unmarshal custom message:", err)
 			return nil
 		}
-		return modules.HandleMessageRouter(message)
+		router := modules.InitRouter()
+		return router.HandleMessageRouter(message)
 	})
 
 	//db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})
