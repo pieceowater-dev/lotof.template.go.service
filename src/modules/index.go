@@ -4,6 +4,7 @@ import (
 	gossiper "github.com/pieceowater-dev/lotof.lib.gossiper"
 	"log"
 	"template/src/core/health"
+	"template/src/modules/items"
 	"template/src/utils/common"
 )
 
@@ -13,12 +14,17 @@ type Router struct {
 
 func InitRouter() *Router {
 	healthRouter := health.New()
+	itemsRouter := items.New()
 
 	return &Router{
 		modules: map[string]common.Module{
 			"health": {
 				Patterns: healthRouter.Patterns,
 				Handler:  healthRouter.HandleMessage,
+			},
+			"items": {
+				Patterns: itemsRouter.Patterns,
+				Handler:  itemsRouter.HandleMessage,
 			},
 		},
 	}

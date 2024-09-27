@@ -2,21 +2,18 @@ package services
 
 import (
 	"encoding/json"
-	"fmt"
-	"github.com/streadway/amqp"
+	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 	"template/src/modules/items/dto"
 	"template/src/modules/items/entities"
-	"template/src/utils/logs"
 )
 
 type ItemService struct {
-	DB       *gorm.DB
-	RabbitMQ *amqp.Connection
+	DB *gorm.DB
 }
 
-func NewItemService(db *gorm.DB, rabbitMQ *amqp.Connection) *ItemService {
-	return &ItemService{DB: db, RabbitMQ: rabbitMQ}
+func NewItemService(db *gorm.DB) *ItemService {
+	return &ItemService{DB: db}
 }
 
 func (s *ItemService) Create(dto dto.CreateItemDTO) (*entities.Item, error) {
@@ -29,9 +26,7 @@ func (s *ItemService) Create(dto dto.CreateItemDTO) (*entities.Item, error) {
 		return nil, err
 	}
 
-	if err := s.publishMessage("createItem", item); err != nil {
-		log.Error(fmt.Errorf("failed to publish create item message: %w", err), nil)
-	}
+	s.logAction("createItem", item)
 
 	return &item, nil
 }
@@ -57,9 +52,7 @@ func (s *ItemService) Update(id int, dto dto.UpdateItemDTO) (*entities.Item, err
 		return nil, err
 	}
 
-	if err := s.publishMessage("updateItem", item); err != nil {
-		log.Error(fmt.Errorf("failed to publish update item message: %w", err), nil)
-	}
+	s.logAction("updateItem", item)
 
 	return &item, nil
 }
@@ -68,41 +61,18 @@ func (s *ItemService) Delete(id int) error {
 	if err := s.DB.Delete(&entities.Item{}, id).Error; err != nil {
 		return err
 	}
-	if err := s.publishMessage("deleteItem", id); err != nil {
-		log.Error(fmt.Errorf("failed to publish delete item message: %w", err), nil)
-	}
+
+	s.logAction("deleteItem", id)
+
 	return nil
 }
 
-func (s *ItemService) publishMessage(routingKey string, message any) error {
-	ch, err := s.RabbitMQ.Channel()
-	if err != nil {
-		return err
-	}
-	defer func(ch *amqp.Channel) {
-		err := ch.Close()
-		if err != nil {
-
-		}
-	}(ch)
-
+func (s *ItemService) logAction(action string, message any) {
 	body, err := json.Marshal(message)
 	if err != nil {
-		return err
+		//log.Error(fmt.Errorf("failed to log action: %w", err))
+		return
 	}
 
-	err = ch.Publish(
-		"",         // exchange
-		routingKey, // routing key
-		false,      // mandatory
-		false,      // immediate
-		amqp.Publishing{
-			ContentType: "application/json",
-			Body:        body,
-		},
-	)
-	if err != nil {
-		return err
-	}
-	return nil
+	log.Info().Str("action", action).Bytes("data", body).Msg("Action logged")
 }
