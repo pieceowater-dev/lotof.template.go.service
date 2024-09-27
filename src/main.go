@@ -1,20 +1,26 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	"encoding/json"
+	gossiper "github.com/pieceowater-dev/lotof.lib.gossiper"
+	"log"
 	"template/src/core/config"
 	"template/src/modules"
-	log "template/src/utils/logs"
 )
 
 func main() {
-	log.InitLogger()
-	port, _, _, _ := config.Setup()
-	router := gin.Default()
+	gossiper.Setup(config.GossiperConf, func(msg []byte) interface{} {
+		var message gossiper.AMQMessage
+		err := json.Unmarshal(msg, &message)
+		if err != nil {
+			log.Println("Failed to unmarshal custom message:", err)
+			return nil
+		}
+		return modules.HandleMessage(message)
+	})
 
-	modules.Init(router)
-
-	if err := router.Run(":" + port); err != nil {
-		log.Error(err, nil)
-	}
+	//db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})
+	//if err != nil {
+	//	log.Error(fmt.Errorf("failed to connect to database: %w", err), nil)
+	//}
 }

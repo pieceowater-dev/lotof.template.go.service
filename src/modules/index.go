@@ -1,10 +1,49 @@
 package modules
 
 import (
-	"github.com/gin-gonic/gin"
-	"template/src/modules/items"
+	gossiper "github.com/pieceowater-dev/lotof.lib.gossiper"
+	"log"
+	"template/src/core/health"
 )
 
-func Init(router *gin.Engine) {
-	items.Init(router)
+//docker run -d -p 3000:3000 --network tools_tools-network --name lotta.gtw -e MODE=dev -e RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672 ghcr.io/pieceowater-dev/lotof.template.gateway:6e471dc
+//---items---
+//createItem
+//findAllItem
+//findOneItem
+//updateItem
+
+type MessageHandler func(gossiper.AMQMessage) interface{}
+
+// Define category to patterns mapping
+var categoryPatterns = map[string][]string{
+	"health": {"ping"},
+	// Add other categories and their patterns here
+}
+
+var handlers = map[string]MessageHandler{
+	"health": health.HandleHealthMessage,
+	// Add other handlers here
+}
+
+func HandleMessage(msg gossiper.AMQMessage) interface{} {
+	category := extractCategory(msg.Pattern)
+
+	handler, exists := handlers[category]
+	if !exists {
+		log.Println("No handler for category:", category)
+		return "Handler not found"
+	}
+	return handler(msg)
+}
+
+func extractCategory(pattern string) string {
+	for category, patterns := range categoryPatterns {
+		for _, p := range patterns {
+			if pattern == p {
+				return category
+			}
+		}
+	}
+	return "unknown" // Default category if not found
 }
