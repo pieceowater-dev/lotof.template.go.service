@@ -27,7 +27,6 @@ func (s *ItemService) Create(dto dto.CreateItemDTO) (*entities.Item, error) {
 	}
 
 	s.logAction("createItem", item)
-
 	return &item, nil
 }
 
@@ -37,6 +36,14 @@ func (s *ItemService) FindByID(id int) (*entities.Item, error) {
 		return nil, err
 	}
 	return &item, nil
+}
+
+func (s *ItemService) FindAll() ([]entities.Item, error) {
+	var items []entities.Item
+	if err := s.DB.Find(&items).Error; err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 func (s *ItemService) Update(id int, dto dto.UpdateItemDTO) (*entities.Item, error) {
@@ -53,7 +60,6 @@ func (s *ItemService) Update(id int, dto dto.UpdateItemDTO) (*entities.Item, err
 	}
 
 	s.logAction("updateItem", item)
-
 	return &item, nil
 }
 
@@ -63,14 +69,13 @@ func (s *ItemService) Delete(id int) error {
 	}
 
 	s.logAction("deleteItem", id)
-
 	return nil
 }
 
-func (s *ItemService) logAction(action string, message any) {
-	body, err := json.Marshal(message)
+func (s *ItemService) logAction(action string, data any) {
+	body, err := json.Marshal(data)
 	if err != nil {
-		//log.Error(fmt.Errorf("failed to log action: %w", err))
+		log.Error().Err(err).Msg("Failed to marshal log data")
 		return
 	}
 

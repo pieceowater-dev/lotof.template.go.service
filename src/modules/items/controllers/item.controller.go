@@ -1,9 +1,7 @@
 package controllers
 
 import (
-	"github.com/gin-gonic/gin"
-	"net/http"
-	"strconv"
+	"log"
 	"template/src/modules/items/dto"
 	"template/src/modules/items/services"
 )
@@ -16,50 +14,70 @@ func NewItemController(service *services.ItemService) *ItemController {
 	return &ItemController{ItemService: service}
 }
 
-func (ctrl *ItemController) CreateItem(c *gin.Context) {
-	var createDTO dto.CreateItemDTO
-	if err := c.ShouldBindJSON(&createDTO); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+func (ctrl *ItemController) CreateItem(data any) any {
+	createDTO, ok := data.(dto.CreateItemDTO)
+	if !ok {
+		log.Println("Invalid data format for CreateItem")
+		return map[string]string{"error": "Invalid data format"}
 	}
+
 	item, err := ctrl.ItemService.Create(createDTO)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
+		log.Println("Error creating item:", err)
+		return map[string]string{"error": err.Error()}
 	}
-	c.JSON(http.StatusOK, item)
+	return item
 }
 
-func (ctrl *ItemController) GetItem(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	item, err := ctrl.ItemService.FindByID(id)
+func (ctrl *ItemController) GetItems(_ any) any {
+	items, err := ctrl.ItemService.FindAll()
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
-		return
+		log.Println("Error retrieving items:", err)
+		return map[string]string{"error": err.Error()}
 	}
-	c.JSON(http.StatusOK, item)
+	return items
 }
 
-func (ctrl *ItemController) UpdateItem(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	var updateDTO dto.UpdateItemDTO
-	if err := c.ShouldBindJSON(&updateDTO); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+func (ctrl *ItemController) GetItem(data any) any {
+	id, ok := data.(float64) // Assuming ID is a number; adjust if needed
+	if !ok {
+		log.Println("Invalid data format for GetItem")
+		return map[string]string{"error": "Invalid data format"}
 	}
-	item, err := ctrl.ItemService.Update(id, updateDTO)
+
+	item, err := ctrl.ItemService.FindByID(int(id))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
+		log.Println("Error retrieving item:", err)
+		return map[string]string{"error": err.Error()}
 	}
-	c.JSON(http.StatusOK, item)
+	return item
 }
 
-func (ctrl *ItemController) DeleteItem(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	if err := ctrl.ItemService.Delete(id); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
+func (ctrl *ItemController) UpdateItem(data any) any {
+	// Assuming data contains both ID and DTO in a map
+	dataMap, ok := data.(map[string]any)
+	if !ok {
+		log.Println("Invalid data format for UpdateItem")
+		return map[string]string{"error": "Invalid data format"}
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Item deleted"})
+
+	id, idOk := dataMap["id"].(float64)               // Adjust as necessary
+	dtoData, dtoOk := dataMap["dto"].(map[string]any) // Assuming DTO is a map
+
+	if !idOk || !dtoOk {
+		log.Println("Invalid data format for UpdateItem")
+		return map[string]string{"error": "Invalid data format"}
+	}
+
+	updateDTO := dto.UpdateItemDTO{
+		Name:    dtoData["name"].(string),    // Adjust field extraction
+		Comment: dtoData["comment"].(string), // Adjust field extraction
+	}
+
+	item, err := ctrl.ItemService.Update(int(id), updateDTO)
+	if err != nil {
+		log.Println("Error updating item:", err)
+		return map[string]string{"error": err.Error()}
+	}
+	return item
 }

@@ -3,6 +3,9 @@ package items
 import (
 	gossiper "github.com/pieceowater-dev/lotof.lib.gossiper"
 	"log"
+	"template/src/core/config"
+	"template/src/modules/items/controllers"
+	"template/src/modules/items/services"
 )
 
 const (
@@ -28,19 +31,17 @@ func New() *Router {
 }
 
 func (h *Router) HandleMessage(msg gossiper.AMQMessage) any {
+	svc := services.NewItemService(config.GetDB())
+	ctr := controllers.NewItemController(svc)
 	switch msg.Pattern {
 	case CreateItem:
-		log.Println("Received createItem request")
-		return "createItem"
+		return ctr.CreateItem(msg.Data)
 	case FindAllItem:
-		log.Println("Received findAllItem request")
-		return "findAllItem"
+		return ctr.GetItems(msg.Data)
 	case FindOneItem:
-		log.Println("Received findOneItem request")
-		return "findOneItem"
+		return ctr.GetItem(msg.Data)
 	case UpdateItem:
-		log.Println("Received updateItem request")
-		return "updateItem"
+		return ctr.UpdateItem(msg.Data)
 	default:
 		log.Println("Unknown action:", msg.Pattern)
 		return "Unknown Items action"

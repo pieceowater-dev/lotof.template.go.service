@@ -8,6 +8,12 @@ import (
 	"template/src/modules"
 )
 
+//TODO: pass DB Connection
+//TODO: handle DTOs
+//TODO: handle filters/search/pagination etc
+//TODO: less ANY
+//TODO: add Docs & Comments
+
 func main() {
 	gossiper.Setup(config.GossiperConf, func(msg []byte) any {
 		var message gossiper.AMQMessage
@@ -19,9 +25,4 @@ func main() {
 		router := modules.InitRouter()
 		return router.HandleMessageRouter(message)
 	})
-
-	//db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})
-	//if err != nil {
-	//	log.Error(fmt.Errorf("failed to connect to database: %w", err), nil)
-	//}
 }
