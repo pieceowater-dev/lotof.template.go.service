@@ -74,7 +74,7 @@ func (s *ItemService) Delete(id int) error {
 	return nil
 }
 
-func (s *ItemService) publishMessage(routingKey string, message interface{}) error {
+func (s *ItemService) publishMessage(routingKey string, message any) error {
 	ch, err := s.RabbitMQ.Channel()
 	if err != nil {
 		return err

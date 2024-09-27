@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func HandleHealthMessage(msg gossiper.AMQMessage) interface{} {
+func HandleHealthMessage(msg gossiper.AMQMessage) any {
 	switch msg.Pattern {
 	case "ping":
 		log.Println("Received PING request")

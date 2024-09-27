@@ -9,14 +9,14 @@ import (
 )
 
 func main() {
-	gossiper.Setup(config.GossiperConf, func(msg []byte) interface{} {
+	gossiper.Setup(config.GossiperConf, func(msg []byte) any {
 		var message gossiper.AMQMessage
 		err := json.Unmarshal(msg, &message)
 		if err != nil {
 			log.Println("Failed to unmarshal custom message:", err)
 			return nil
 		}
-		return modules.HandleMessage(message)
+		return modules.HandleMessageRouter(message)
 	})
 
 	//db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})

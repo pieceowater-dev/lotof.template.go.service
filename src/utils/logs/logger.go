@@ -18,8 +18,8 @@ func InitLogger() {
 }
 
 // Info logs informational messages with optional structured fields (key-value pairs).
-// Example usage: Info("Service started", map[string]interface{}{"service": "auth", "status": "OK"})
-func Info(msg string, fields map[string]interface{}) {
+// Example usage: Info("Service started", map[string]any{"service": "auth", "status": "OK"})
+func Info(msg string, fields map[string]any) {
 	event := log.Info().Timestamp()
 	for key, value := range fields {
 		event.Interface(key, value)
@@ -28,8 +28,8 @@ func Info(msg string, fields map[string]interface{}) {
 }
 
 // Error logs error messages along with optional structured fields.
-// Example usage: Error(err, map[string]interface{}{"action": "db_connect", "status": "failed"})
-func Error(err error, fields map[string]interface{}) {
+// Example usage: Error(err, map[string]any{"action": "db_connect", "status": "failed"})
+func Error(err error, fields map[string]any) {
 	event := log.Error().Err(err).Timestamp()
 	for key, value := range fields {
 		event.Interface(key, value)
@@ -38,8 +38,8 @@ func Error(err error, fields map[string]interface{}) {
 }
 
 // Warn logs warning messages with optional structured fields.
-// Example usage: Warn("Low disk space", map[string]interface{}{"available": "500MB"})
-func Warn(msg string, fields map[string]interface{}) {
+// Example usage: Warn("Low disk space", map[string]any{"available": "500MB"})
+func Warn(msg string, fields map[string]any) {
 	event := log.Warn().Timestamp()
 	for key, value := range fields {
 		event.Interface(key, value)
@@ -48,8 +48,8 @@ func Warn(msg string, fields map[string]interface{}) {
 }
 
 // WithDuration logs informational messages with an additional "duration" field to track performance.
-// Example usage: WithDuration("DB query executed", time.Duration(125 * time.Millisecond), map[string]interface{}{"query": "SELECT * FROM users"})
-func WithDuration(msg string, duration time.Duration, fields map[string]interface{}) {
+// Example usage: WithDuration("DB query executed", time.Duration(125 * time.Millisecond), map[string]any{"query": "SELECT * FROM users"})
+func WithDuration(msg string, duration time.Duration, fields map[string]any) {
 	event := log.Info().Timestamp().Str("duration", duration.String())
 	for key, value := range fields {
 		event.Interface(key, value)
@@ -58,8 +58,8 @@ func WithDuration(msg string, duration time.Duration, fields map[string]interfac
 }
 
 // Debug logs debug messages with optional structured fields. Useful for tracing.
-// Example usage: Debug("Cache miss", map[string]interface{}{"key": "user_123"})
-func Debug(msg string, fields map[string]interface{}) {
+// Example usage: Debug("Cache miss", map[string]any{"key": "user_123"})
+func Debug(msg string, fields map[string]any) {
 	event := log.Debug().Timestamp()
 	for key, value := range fields {
 		event.Interface(key, value)

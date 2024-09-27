@@ -13,7 +13,7 @@ import (
 //findOneItem
 //updateItem
 
-type MessageHandler func(gossiper.AMQMessage) interface{}
+type MessageHandler func(gossiper.AMQMessage) any
 
 // Define category to patterns mapping
 var categoryPatterns = map[string][]string{
@@ -26,7 +26,7 @@ var handlers = map[string]MessageHandler{
 	// Add other handlers here
 }
 
-func HandleMessage(msg gossiper.AMQMessage) interface{} {
+func HandleMessageRouter(msg gossiper.AMQMessage) any {
 	category := extractCategory(msg.Pattern)
 
 	handler, exists := handlers[category]
