@@ -8,19 +8,18 @@ import (
 )
 
 type Router struct {
-	modulePatterns map[string][]string
-	modules        map[string]common.MessageHandler
+	modules map[string]common.Module
 }
 
 func InitRouter() *Router {
 	healthRouter := health.New()
 
 	return &Router{
-		modules: map[string]common.MessageHandler{
-			"health": healthRouter.HandleMessage,
-		},
-		modulePatterns: map[string][]string{
-			"health": healthRouter.Patterns,
+		modules: map[string]common.Module{
+			"health": {
+				Patterns: healthRouter.Patterns,
+				Handler:  healthRouter.HandleMessage,
+			},
 		},
 	}
 }
@@ -28,17 +27,17 @@ func InitRouter() *Router {
 func (r *Router) HandleMessageRouter(msg gossiper.AMQMessage) any {
 	category := r.extractCategory(msg.Pattern)
 
-	handler, exists := r.modules[category]
+	module, exists := r.modules[category]
 	if !exists {
 		log.Println("No handler for category:", category)
 		return "Handler not found"
 	}
-	return handler(msg)
+	return module.Handler(msg)
 }
 
 func (r *Router) extractCategory(pattern string) string {
-	for category, patterns := range r.modulePatterns {
-		for _, p := range patterns {
+	for category, module := range r.modules {
+		for _, p := range module.Patterns {
 			if pattern == p {
 				return category
 			}
