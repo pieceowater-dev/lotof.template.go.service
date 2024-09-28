@@ -12,7 +12,6 @@ import (
 //TODO: handle filters/search/pagination etc
 //TODO: less ANY
 //TODO: add Docs & Comments
-//TODO: Readme.md
 
 func main() {
 	gossiper.Setup(
