@@ -3,12 +3,13 @@ name: Compose
 on:
   push:
     branches:
-#      - main
-#      - dev
+      - main
+      - dev
 
 jobs:
   compose:
     runs-on: ubuntu-latest
+    if: false  # Disabled. Set true if you ready
 
     steps:
       - name: Checkout repository
