@@ -1,8 +1,10 @@
 package ctrl
 
 import (
+	. "application/internal/core/utils/common/dto"
 	"application/internal/pkg/items/dto"
 	"application/internal/pkg/items/svc"
+	gossiper "github.com/pieceowater-dev/lotof.lib.gossiper"
 	"log"
 )
 
@@ -15,10 +17,11 @@ func NewItemController(service *svc.ItemService) *ItemController {
 }
 
 func (ctrl *ItemController) CreateItem(data any) any {
-	createDTO, ok := data.(dto.CreateItemDTO)
-	if !ok {
-		log.Println("Invalid data format for CreateItem")
-		return map[string]string{"error": "Invalid data format"}
+	var createDTO dto.CreateItemDTO
+	err := gossiper.Satisfies(data, &createDTO)
+	if err != nil {
+		log.Println("Error validating input for CreateItem:", err)
+		return map[string]string{"error": "Invalid input"}
 	}
 
 	item, err := ctrl.ItemService.Create(createDTO)
@@ -26,6 +29,7 @@ func (ctrl *ItemController) CreateItem(data any) any {
 		log.Println("Error creating item:", err)
 		return map[string]string{"error": err.Error()}
 	}
+
 	return item
 }
 
@@ -39,42 +43,31 @@ func (ctrl *ItemController) GetItems(_ any) any {
 }
 
 func (ctrl *ItemController) GetItem(data any) any {
-	id, ok := data.(float64) // Assuming ID is a number; adjust if needed
-	if !ok {
-		log.Println("Invalid data format for GetItem")
-		return map[string]string{"error": "Invalid data format"}
+	var idDTO ID
+	err := gossiper.Satisfies(data, &idDTO)
+	if err != nil {
+		log.Println("Error validating input for GetItem:", err)
+		return map[string]string{"error": "Invalid input"}
 	}
 
-	item, err := ctrl.ItemService.FindByID(int(id))
+	item, err := ctrl.ItemService.FindByID(idDTO.ID)
 	if err != nil {
 		log.Println("Error retrieving item:", err)
 		return map[string]string{"error": err.Error()}
 	}
+
 	return item
 }
 
 func (ctrl *ItemController) UpdateItem(data any) any {
-	// Assuming data contains both ID and DTO in a map
-	dataMap, ok := data.(map[string]any)
-	if !ok {
-		log.Println("Invalid data format for UpdateItem")
-		return map[string]string{"error": "Invalid data format"}
+	updateDTO := dto.UpdateItemDTO{}
+	err := gossiper.Satisfies(data, &updateDTO)
+	if err != nil {
+		log.Println("Error validating input for UpdateItem:", err)
+		return map[string]string{"error": "Invalid input"}
 	}
 
-	id, idOk := dataMap["id"].(float64)               // Adjust as necessary
-	dtoData, dtoOk := dataMap["dto"].(map[string]any) // Assuming DTO is a map
-
-	if !idOk || !dtoOk {
-		log.Println("Invalid data format for UpdateItem")
-		return map[string]string{"error": "Invalid data format"}
-	}
-
-	updateDTO := dto.UpdateItemDTO{
-		Name:    dtoData["name"].(string),    // Adjust field extraction
-		Comment: dtoData["comment"].(string), // Adjust field extraction
-	}
-
-	item, err := ctrl.ItemService.Update(int(id), updateDTO)
+	item, err := ctrl.ItemService.Update(updateDTO.ID, updateDTO)
 	if err != nil {
 		log.Println("Error updating item:", err)
 		return map[string]string{"error": err.Error()}

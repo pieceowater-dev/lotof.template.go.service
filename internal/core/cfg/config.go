@@ -6,7 +6,11 @@ import (
 
 var GossiperConf = gossiper.Config{
 	Env: gossiper.EnvConfig{
-		Required: []string{"DATABASE_DSN", "RABBITMQ_DSN"},
+		Required: []string{
+			// indexes order is important for some getter functions
+			"DATABASE_DSN", // DB connection string at 0 index
+			"RABBITMQ_DSN", // RabbitMQ connection string at 1 index
+		},
 	},
 	AMQPConsumer: gossiper.AMQPConsumerConfig{
 		DSNEnv: "RABBITMQ_DSN",

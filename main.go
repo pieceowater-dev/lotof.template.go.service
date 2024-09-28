@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-//TODO: handle DTOs
+//TODO: response formats + error response format
 //TODO: handle filters/search/pagination etc
 //TODO: less ANY
 //TODO: add Docs & Comments
