@@ -11,6 +11,11 @@ import (
 
 var db *gorm.DB
 
+var models = []interface{}{
+	&entities.Item{},
+	// Add other models here
+}
+
 func GetDB() *gorm.DB {
 	return db
 }
@@ -24,9 +29,7 @@ func InitDB() {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
 
-	err = db.AutoMigrate(
-		&entities.Item{},
-	)
+	err = db.AutoMigrate(models...)
 	if err != nil {
 		log.Fatalf("failed to auto-migrate: %v", err)
 	}

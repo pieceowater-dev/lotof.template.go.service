@@ -14,7 +14,8 @@ import (
 //TODO: add Docs & Comments
 
 func main() {
-	gossiper.Setup(config.GossiperConf,
+	gossiper.Setup(
+		config.GossiperConf,
 		func() any {
 			config.InitDB()
 			return nil
