@@ -1,4 +1,4 @@
-package config
+package cfg
 
 import (
 	gossiper "github.com/pieceowater-dev/lotof.lib.gossiper"

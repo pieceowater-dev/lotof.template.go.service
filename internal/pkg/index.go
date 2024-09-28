@@ -1,11 +1,11 @@
-package modules
+package pkg
 
 import (
+	"application/internal/core/health"
+	"application/internal/core/utils/common"
+	"application/internal/pkg/items"
 	gossiper "github.com/pieceowater-dev/lotof.lib.gossiper"
 	"log"
-	"template/src/core/health"
-	"template/src/modules/items"
-	"template/src/utils/common"
 )
 
 type Router struct {

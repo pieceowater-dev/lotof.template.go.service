@@ -1,11 +1,11 @@
 package main
 
 import (
+	"application/internal/core/cfg"
+	"application/internal/pkg"
 	"encoding/json"
 	gossiper "github.com/pieceowater-dev/lotof.lib.gossiper"
 	"log"
-	"template/src/core/config"
-	"template/src/modules"
 )
 
 //TODO: handle DTOs
@@ -15,9 +15,9 @@ import (
 
 func main() {
 	gossiper.Setup(
-		config.GossiperConf,
+		cfg.GossiperConf,
 		func() any {
-			config.InitDB()
+			cfg.InitDB()
 			return nil
 		},
 		func(msg []byte) any {
@@ -27,7 +27,7 @@ func main() {
 				log.Println("Failed to unmarshal custom message:", err)
 				return nil
 			}
-			router := modules.InitRouter()
+			router := pkg.InitRouter()
 			return router.HandleMessageRouter(message)
 		},
 	)

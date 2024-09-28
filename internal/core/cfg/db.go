@@ -1,18 +1,18 @@
-package config
+package cfg
 
 import (
+	"application/internal/pkg/items/ent"
 	_ "github.com/lib/pq"
 	gossiper "github.com/pieceowater-dev/lotof.lib.gossiper"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
-	"template/src/modules/items/entities"
 )
 
 var db *gorm.DB
 
 var models = []interface{}{
-	&entities.Item{},
+	&ent.Item{},
 	// Add other models here
 }
 

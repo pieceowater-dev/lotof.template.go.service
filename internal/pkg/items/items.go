@@ -1,11 +1,11 @@
 package items
 
 import (
+	"application/internal/core/cfg"
+	"application/internal/pkg/items/ctrl"
+	"application/internal/pkg/items/svc"
 	gossiper "github.com/pieceowater-dev/lotof.lib.gossiper"
 	"log"
-	"template/src/core/config"
-	"template/src/modules/items/controllers"
-	"template/src/modules/items/services"
 )
 
 const (
@@ -31,8 +31,8 @@ func New() *Router {
 }
 
 func (h *Router) HandleMessage(msg gossiper.AMQMessage) any {
-	svc := services.NewItemService(config.GetDB())
-	ctr := controllers.NewItemController(svc)
+	svc := svc.NewItemService(cfg.GetDB())
+	ctr := ctrl.NewItemController(svc)
 	switch msg.Pattern {
 	case CreateItem:
 		return ctr.CreateItem(msg.Data)

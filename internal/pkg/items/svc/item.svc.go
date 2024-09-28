@@ -1,11 +1,11 @@
-package services
+package svc
 
 import (
+	"application/internal/pkg/items/dto"
+	"application/internal/pkg/items/ent"
 	"encoding/json"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
-	"template/src/modules/items/dto"
-	"template/src/modules/items/entities"
 )
 
 type ItemService struct {
@@ -16,8 +16,8 @@ func NewItemService(db *gorm.DB) *ItemService {
 	return &ItemService{DB: db}
 }
 
-func (s *ItemService) Create(dto dto.CreateItemDTO) (*entities.Item, error) {
-	item := entities.Item{
+func (s *ItemService) Create(dto dto.CreateItemDTO) (*ent.Item, error) {
+	item := ent.Item{
 		Name:    dto.Name,
 		Comment: dto.Comment,
 	}
@@ -30,24 +30,24 @@ func (s *ItemService) Create(dto dto.CreateItemDTO) (*entities.Item, error) {
 	return &item, nil
 }
 
-func (s *ItemService) FindByID(id int) (*entities.Item, error) {
-	var item entities.Item
+func (s *ItemService) FindByID(id int) (*ent.Item, error) {
+	var item ent.Item
 	if err := s.DB.First(&item, id).Error; err != nil {
 		return nil, err
 	}
 	return &item, nil
 }
 
-func (s *ItemService) FindAll() ([]entities.Item, error) {
-	var items []entities.Item
+func (s *ItemService) FindAll() ([]ent.Item, error) {
+	var items []ent.Item
 	if err := s.DB.Find(&items).Error; err != nil {
 		return nil, err
 	}
 	return items, nil
 }
 
-func (s *ItemService) Update(id int, dto dto.UpdateItemDTO) (*entities.Item, error) {
-	var item entities.Item
+func (s *ItemService) Update(id int, dto dto.UpdateItemDTO) (*ent.Item, error) {
+	var item ent.Item
 	if err := s.DB.First(&item, id).Error; err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (s *ItemService) Update(id int, dto dto.UpdateItemDTO) (*entities.Item, err
 }
 
 func (s *ItemService) Delete(id int) error {
-	if err := s.DB.Delete(&entities.Item{}, id).Error; err != nil {
+	if err := s.DB.Delete(&ent.Item{}, id).Error; err != nil {
 		return err
 	}
 

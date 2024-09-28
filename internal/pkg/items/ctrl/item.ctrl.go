@@ -1,16 +1,16 @@
-package controllers
+package ctrl
 
 import (
+	"application/internal/pkg/items/dto"
+	"application/internal/pkg/items/svc"
 	"log"
-	"template/src/modules/items/dto"
-	"template/src/modules/items/services"
 )
 
 type ItemController struct {
-	ItemService *services.ItemService
+	ItemService *svc.ItemService
 }
 
-func NewItemController(service *services.ItemService) *ItemController {
+func NewItemController(service *svc.ItemService) *ItemController {
 	return &ItemController{ItemService: service}
 }
 
