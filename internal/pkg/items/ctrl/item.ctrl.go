@@ -16,61 +16,71 @@ func NewItemController(service *svc.ItemService) *ItemController {
 	return &ItemController{ItemService: service}
 }
 
+// CreateItem handles the creation of an item
 func (ctrl *ItemController) CreateItem(data any) any {
 	var createDTO dto.CreateItemDTO
 	err := gossiper.Satisfies(data, &createDTO)
 	if err != nil {
 		log.Println("Error validating input for CreateItem:", err)
-		return map[string]string{"error": "Invalid input"}
+		return gossiper.NewServiceError("Invalid input").GetError()
 	}
 
 	item, err := ctrl.ItemService.Create(createDTO)
 	if err != nil {
 		log.Println("Error creating item:", err)
-		return map[string]string{"error": err.Error()}
+		return gossiper.NewServiceError(err.Error()).GetError()
 	}
 
 	return item
 }
 
-func (ctrl *ItemController) GetItems(_ any) any {
-	items, err := ctrl.ItemService.FindAll()
+// GetItems handles retrieving items with pagination and filtering
+func (ctrl *ItemController) GetItems(data any) any {
+	filter := gossiper.NewFilter[dto.UpdateItemDTO]()
+
+	err := gossiper.Satisfies(data, &filter)
 	if err != nil {
-		log.Println("Error retrieving items:", err)
-		return map[string]string{"error": err.Error()}
+		log.Println("Error validating input for GetItems:", err)
+		return gossiper.NewServiceError("Invalid input").GetError()
 	}
-	return items
+
+	// Pass filter to FindAll
+	res := ctrl.ItemService.FindAll(filter)
+
+	return gossiper.ToPaginated(res.Rows, res.Info.Count)
 }
 
+// GetItem retrieves a single item by ID
 func (ctrl *ItemController) GetItem(data any) any {
 	var idDTO ID
 	err := gossiper.Satisfies(data, &idDTO)
 	if err != nil {
 		log.Println("Error validating input for GetItem:", err)
-		return map[string]string{"error": "Invalid input"}
+		return gossiper.NewServiceError("Invalid input").GetError()
 	}
 
 	item, err := ctrl.ItemService.FindByID(idDTO.ID)
 	if err != nil {
 		log.Println("Error retrieving item:", err)
-		return map[string]string{"error": err.Error()}
+		return gossiper.NewServiceError(err.Error()).GetError()
 	}
 
 	return item
 }
 
+// UpdateItem handles updating an item
 func (ctrl *ItemController) UpdateItem(data any) any {
 	updateDTO := dto.UpdateItemDTO{}
 	err := gossiper.Satisfies(data, &updateDTO)
 	if err != nil {
 		log.Println("Error validating input for UpdateItem:", err)
-		return map[string]string{"error": "Invalid input"}
+		return gossiper.NewServiceError("Invalid input").GetError()
 	}
 
 	item, err := ctrl.ItemService.Update(updateDTO.ID, updateDTO)
 	if err != nil {
 		log.Println("Error updating item:", err)
-		return map[string]string{"error": err.Error()}
+		return gossiper.NewServiceError(err.Error()).GetError()
 	}
 	return item
 }

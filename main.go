@@ -8,8 +8,10 @@ import (
 	"log"
 )
 
+//TODO: refactor handle filters/search/pagination etc
 //TODO: response formats + error response format
-//TODO: handle filters/search/pagination etc
+
+//TODO: exception/panic handling
 //TODO: less ANY
 //TODO: add Docs & Comments
 
