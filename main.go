@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-//TODO: response formats + error response format
+//TODO: pack some shi to gossiper
 
 //TODO: exception/panic handling
 //TODO: refactor handle filters/search/pagination etc

@@ -9,12 +9,6 @@ import (
 	"log"
 )
 
-// ServiceResponse wraps the result of the FindAll method.
-type ServiceResponse struct {
-	Items []ent.Item
-	Count int
-}
-
 type ItemService struct {
 	DB *gorm.DB
 }
