@@ -6,7 +6,14 @@ import (
 	"application/internal/pkg/items/svc"
 	g "github.com/pieceowater-dev/lotof.lib.gossiper"
 	"log"
+	"net/http"
 )
+
+type AppResponse struct {
+	success bool
+	message string
+	data    any
+}
 
 type ItemController struct {
 	ItemService *svc.ItemService
@@ -22,13 +29,13 @@ func (ctrl *ItemController) CreateItem(data any) any {
 	err := g.Satisfies(data, &createDTO)
 	if err != nil {
 		log.Println("Error validating input for CreateItem:", err)
-		return g.NewServiceError("Invalid input").GetError()
+		return g.NewServiceError("Invalid input", http.StatusBadRequest).GetError()
 	}
 
 	item, err := ctrl.ItemService.Create(createDTO)
 	if err != nil {
 		log.Println("Error creating item:", err)
-		return g.NewServiceError(err.Error()).GetError()
+		return g.NewServiceError(err.Error(), http.StatusInternalServerError).GetError()
 	}
 
 	return item

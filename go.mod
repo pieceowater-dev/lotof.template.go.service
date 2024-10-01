@@ -4,7 +4,7 @@ go 1.23.0
 
 require (
 	github.com/lib/pq v1.10.9
-	github.com/pieceowater-dev/lotof.lib.gossiper v1.0.42
+	github.com/pieceowater-dev/lotof.lib.gossiper v1.0.44
 	gorm.io/driver/postgres v1.5.9
 	gorm.io/gorm v1.25.12
 )
@@ -29,7 +29,7 @@ require (
 	github.com/rs/zerolog v1.33.0 // indirect
 	github.com/stretchr/testify v1.9.0 // indirect
 	golang.org/x/crypto v0.27.0 // indirect
-	golang.org/x/net v0.27.0 // indirect
+	golang.org/x/net v0.29.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
 	golang.org/x/sys v0.25.0 // indirect
 	golang.org/x/text v0.18.0 // indirect

@@ -88,7 +88,7 @@ func (s *ItemService) Update(id int, dto dto.UpdateItemDTO) (*ent.Item, error) {
 	}
 
 	item.Name = dto.Name
-	if dto.Comment != nil {
+	if dto.Comment != nil && *dto.Comment != "" {
 		item.Comment = *dto.Comment
 	}
 
