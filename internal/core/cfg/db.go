@@ -3,7 +3,7 @@ package cfg
 import (
 	"application/internal/pkg/items/ent"
 	_ "github.com/lib/pq"
-	gossiper "github.com/pieceowater-dev/lotof.lib.gossiper"
+	g "github.com/pieceowater-dev/lotof.lib.gossiper"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
@@ -35,7 +35,7 @@ func InitDB() {
 }
 
 func getPostgresDSN() string {
-	envInstance := &gossiper.Env{}
+	envInstance := &g.Env{}
 	val, err := envInstance.Get(GossiperConf.Env.Required[0])
 	if err != nil {
 		return ""

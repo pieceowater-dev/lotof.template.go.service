@@ -4,7 +4,7 @@ import (
 	. "application/internal/core/utils/common/dto"
 	"application/internal/pkg/items/dto"
 	"application/internal/pkg/items/svc"
-	gossiper "github.com/pieceowater-dev/lotof.lib.gossiper"
+	g "github.com/pieceowater-dev/lotof.lib.gossiper"
 	"log"
 )
 
@@ -19,16 +19,16 @@ func NewItemController(service *svc.ItemService) *ItemController {
 // CreateItem handles the creation of an item
 func (ctrl *ItemController) CreateItem(data any) any {
 	var createDTO dto.CreateItemDTO
-	err := gossiper.Satisfies(data, &createDTO)
+	err := g.Satisfies(data, &createDTO)
 	if err != nil {
 		log.Println("Error validating input for CreateItem:", err)
-		return gossiper.NewServiceError("Invalid input").GetError()
+		return g.NewServiceError("Invalid input").GetError()
 	}
 
 	item, err := ctrl.ItemService.Create(createDTO)
 	if err != nil {
 		log.Println("Error creating item:", err)
-		return gossiper.NewServiceError(err.Error()).GetError()
+		return g.NewServiceError(err.Error()).GetError()
 	}
 
 	return item
@@ -36,33 +36,33 @@ func (ctrl *ItemController) CreateItem(data any) any {
 
 // GetItems handles retrieving items with pagination and filtering
 func (ctrl *ItemController) GetItems(data any) any {
-	filter := gossiper.NewFilter[dto.UpdateItemDTO]()
+	filter := g.NewFilter[dto.UpdateItemDTO]()
 
-	err := gossiper.Satisfies(data, &filter)
+	err := g.Satisfies(data, &filter)
 	if err != nil {
 		log.Println("Error validating input for GetItems:", err)
-		return gossiper.NewServiceError("Invalid input").GetError()
+		return g.NewServiceError("Invalid input").GetError()
 	}
 
 	// Pass filter to FindAll
 	res := ctrl.ItemService.FindAll(filter)
 
-	return gossiper.ToPaginated(res.Rows, res.Info.Count)
+	return g.ToPaginated(res.Rows, res.Info.Count)
 }
 
 // GetItem retrieves a single item by ID
 func (ctrl *ItemController) GetItem(data any) any {
 	var idDTO ID
-	err := gossiper.Satisfies(data, &idDTO)
+	err := g.Satisfies(data, &idDTO)
 	if err != nil {
 		log.Println("Error validating input for GetItem:", err)
-		return gossiper.NewServiceError("Invalid input").GetError()
+		return g.NewServiceError("Invalid input").GetError()
 	}
 
 	item, err := ctrl.ItemService.FindByID(idDTO.ID)
 	if err != nil {
 		log.Println("Error retrieving item:", err)
-		return gossiper.NewServiceError(err.Error()).GetError()
+		return g.NewServiceError(err.Error()).GetError()
 	}
 
 	return item
@@ -71,16 +71,16 @@ func (ctrl *ItemController) GetItem(data any) any {
 // UpdateItem handles updating an item
 func (ctrl *ItemController) UpdateItem(data any) any {
 	updateDTO := dto.UpdateItemDTO{}
-	err := gossiper.Satisfies(data, &updateDTO)
+	err := g.Satisfies(data, &updateDTO)
 	if err != nil {
 		log.Println("Error validating input for UpdateItem:", err)
-		return gossiper.NewServiceError("Invalid input").GetError()
+		return g.NewServiceError("Invalid input").GetError()
 	}
 
 	item, err := ctrl.ItemService.Update(updateDTO.ID, updateDTO)
 	if err != nil {
 		log.Println("Error updating item:", err)
-		return gossiper.NewServiceError(err.Error()).GetError()
+		return g.NewServiceError(err.Error()).GetError()
 	}
 	return item
 }

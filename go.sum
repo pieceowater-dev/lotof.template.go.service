@@ -39,8 +39,8 @@ github.com/mattn/go-isatty v0.0.16/go.mod h1:kYGgaQfpe5nmfYZH+SKPsOc2e4SrIfOl2e/
 github.com/mattn/go-isatty v0.0.19/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
 github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWEY=
 github.com/mattn/go-isatty v0.0.20/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
-github.com/pieceowater-dev/lotof.lib.gossiper v1.0.39 h1:97gi+5qLV1qGsWr6VGilhNk0/KIrnmxc5fSpki2b8+E=
-github.com/pieceowater-dev/lotof.lib.gossiper v1.0.39/go.mod h1:RGpEy8/VMJ9owg4i7Iva+Ky1dfOVqDf2YxReTkBkssQ=
+github.com/pieceowater-dev/lotof.lib.gossiper v1.0.42 h1:/FxmwJQOiSn4l/zdM0dfI6NlwK15QRZW2Lez+yjND+0=
+github.com/pieceowater-dev/lotof.lib.gossiper v1.0.42/go.mod h1:RGpEy8/VMJ9owg4i7Iva+Ky1dfOVqDf2YxReTkBkssQ=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=

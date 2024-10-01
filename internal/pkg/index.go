@@ -4,7 +4,7 @@ import (
 	"application/internal/core/health"
 	"application/internal/core/utils/common"
 	"application/internal/pkg/items"
-	gossiper "github.com/pieceowater-dev/lotof.lib.gossiper"
+	g "github.com/pieceowater-dev/lotof.lib.gossiper"
 	"log"
 )
 
@@ -30,7 +30,7 @@ func InitRouter() *Router {
 	}
 }
 
-func (r *Router) HandleMessageRouter(msg gossiper.AMQMessage) any {
+func (r *Router) HandleMessageRouter(msg g.AMQMessage) any {
 	category := r.extractCategory(msg.Pattern)
 
 	module, exists := r.modules[category]

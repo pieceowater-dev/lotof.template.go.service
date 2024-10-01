@@ -1,7 +1,7 @@
 package health
 
 import (
-	gossiper "github.com/pieceowater-dev/lotof.lib.gossiper"
+	g "github.com/pieceowater-dev/lotof.lib.gossiper"
 	"log"
 )
 
@@ -19,7 +19,7 @@ func New() *Router {
 	}
 }
 
-func (h *Router) HandleMessage(msg gossiper.AMQMessage) any {
+func (h *Router) HandleMessage(msg g.AMQMessage) any {
 	switch msg.Pattern {
 	case Ping:
 		log.Println("Received PING request")

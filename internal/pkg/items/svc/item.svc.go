@@ -3,7 +3,7 @@ package svc
 import (
 	"application/internal/pkg/items/dto"
 	"application/internal/pkg/items/ent"
-	gossiper "github.com/pieceowater-dev/lotof.lib.gossiper"
+	g "github.com/pieceowater-dev/lotof.lib.gossiper"
 	t "github.com/pieceowater-dev/lotof.lib.gossiper/types"
 	"gorm.io/gorm"
 	"log"
@@ -38,7 +38,7 @@ func (s *ItemService) Create(dto dto.CreateItemDTO) (*ent.Item, error) {
 }
 
 // FindAll retrieves items based on the filter with pagination and search
-func (s *ItemService) FindAll(filter t.DefaultFilter[dto.UpdateItemDTO]) gossiper.PaginatedEntity[ent.Item] {
+func (s *ItemService) FindAll(filter t.DefaultFilter[dto.UpdateItemDTO]) g.PaginatedEntity[ent.Item] {
 	var items []ent.Item
 	var count int64
 
@@ -54,7 +54,7 @@ func (s *ItemService) FindAll(filter t.DefaultFilter[dto.UpdateItemDTO]) gossipe
 	// Count total items (without pagination)
 	err := query.Count(&count).Error
 	if err != nil {
-		return gossiper.PaginatedEntity[ent.Item]{}
+		return g.PaginatedEntity[ent.Item]{}
 	}
 
 	// Apply pagination
@@ -64,10 +64,10 @@ func (s *ItemService) FindAll(filter t.DefaultFilter[dto.UpdateItemDTO]) gossipe
 	// Get the filtered items
 	err = query.Find(&items).Error
 	if err != nil {
-		return gossiper.PaginatedEntity[ent.Item]{}
+		return g.PaginatedEntity[ent.Item]{}
 	}
 
-	return gossiper.ToPaginated(items, int(count))
+	return g.ToPaginated(items, int(count))
 }
 
 // FindByID retrieves a single item by ID

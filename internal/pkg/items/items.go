@@ -5,7 +5,7 @@ import (
 	"application/internal/core/utils/common"
 	"application/internal/pkg/items/ctrl"
 	"application/internal/pkg/items/svc"
-	gossiper "github.com/pieceowater-dev/lotof.lib.gossiper"
+	g "github.com/pieceowater-dev/lotof.lib.gossiper"
 	"log"
 )
 
@@ -31,7 +31,7 @@ func New() *Router {
 	}
 }
 
-func (h *Router) HandleMessage(msg gossiper.AMQMessage) any {
+func (h *Router) HandleMessage(msg g.AMQMessage) any {
 	service := svc.NewItemService(cfg.GetDB())
 	controller := ctrl.NewItemController(service)
 
@@ -52,6 +52,6 @@ func (h *Router) HandleMessage(msg gossiper.AMQMessage) any {
 		return "Unknown Items action"
 	}
 
-	defer gossiper.LogAction(msg.Pattern, common.ActionLog{Request: msg.Data, Response: r})
+	defer g.LogAction(msg.Pattern, common.ActionLog{Request: msg.Data, Response: r})
 	return r
 }
