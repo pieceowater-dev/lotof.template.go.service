@@ -4,7 +4,7 @@ go 1.23.0
 
 require (
 	github.com/lib/pq v1.10.9
-	github.com/pieceowater-dev/lotof.lib.gossiper v1.0.44
+	github.com/pieceowater-dev/lotof.lib.gossiper v1.0.45
 	gorm.io/driver/postgres v1.5.9
 	gorm.io/gorm v1.25.12
 )

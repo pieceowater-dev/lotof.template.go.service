@@ -11,15 +11,15 @@ import (
 //TODO: pack some shi to gossiper
 
 //TODO: exception/panic handling
-//TODO: refactor handle filters/search/pagination etc
 //TODO: less ANY
-//TODO: add Docs & Comments
 
 func main() {
-	g.Setup(
+	app := g.Bootstrap{}
+	app.Setup(
 		cfg.GossiperConf,
 		func() any {
-			cfg.InitDB()
+			log.Println("Binding db...")
+			cfg.SetDB(app.DB.GetDB())
 			return nil
 		},
 		func(msg []byte) any {

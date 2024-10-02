@@ -1,6 +1,7 @@
 package cfg
 
 import (
+	"application/internal/pkg/items/ent"
 	g "github.com/pieceowater-dev/lotof.lib.gossiper"
 )
 
@@ -25,6 +26,17 @@ var GossiperConf = g.Config{
 				Queue:    "template_queue",
 				Consumer: "example_consumer",
 				AutoAck:  true,
+			},
+		},
+	},
+	Database: g.DatabaseConfig{
+		PG: g.DBPGConfig{
+			EnvPostgresDBDSN: "DATABASE_DSN",
+			AutoMigrate:      true,
+			Models: []any{
+				// Your models go here
+				// &yourModel{}, // Example: Define the models that will be auto-migrated
+				&ent.Item{},
 			},
 		},
 	},

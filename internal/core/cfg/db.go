@@ -1,44 +1,26 @@
 package cfg
 
 import (
-	"application/internal/pkg/items/ent"
 	_ "github.com/lib/pq"
-	g "github.com/pieceowater-dev/lotof.lib.gossiper"
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"log"
+	"sync"
 )
 
-var db *gorm.DB
+var (
+	db   *gorm.DB
+	once sync.Once // Ensures DB is only initialized once
+)
 
-var models = []interface{}{
-	&ent.Item{},
-	// Add other models here
-}
-
+// GetDB safely returns the initialized *gorm.DB instance.
+// If db has not been initialized, this will return nil.
 func GetDB() *gorm.DB {
 	return db
 }
 
-func InitDB() {
-	dsn := getPostgresDSN()
-	var err error
-	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatalf("failed to connect to database: %v", err)
-	}
-
-	err = db.AutoMigrate(models...)
-	if err != nil {
-		log.Fatalf("failed to auto-migrate: %v", err)
-	}
-}
-
-func getPostgresDSN() string {
-	envInstance := &g.Env{}
-	val, err := envInstance.Get(GossiperConf.Env.Required[0])
-	if err != nil {
-		return ""
-	}
-	return val
+// SetDB safely sets the *gorm.DB instance.
+// Uses sync.Once to prevent reinitialization of the DB.
+func SetDB(database *gorm.DB) {
+	once.Do(func() {
+		db = database
+	})
 }
