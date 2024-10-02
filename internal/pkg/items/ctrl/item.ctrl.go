@@ -46,9 +46,7 @@ func (ctrl *ItemController) GetItems(data any) any {
 	}
 
 	// Pass filter to FindAll
-	res := ctrl.ItemService.FindAll(filter)
-
-	return g.ToPaginated(res.Rows, res.Info.Count)
+	return ctrl.ItemService.FindAll(filter)
 }
 
 // GetItem retrieves a single item by ID
