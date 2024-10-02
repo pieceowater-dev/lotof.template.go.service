@@ -100,7 +100,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Author
 ![PCWT Dev Logo](https://avatars.githubusercontent.com/u/168465239?s=50)
 ### [PCWT Dev](https://github.com/pieceowater-dev)
-
----
-
-Feel free to adjust any section as needed!
