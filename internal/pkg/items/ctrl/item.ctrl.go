@@ -9,12 +9,6 @@ import (
 	"net/http"
 )
 
-type AppResponse struct {
-	success bool
-	message string
-	data    any
-}
-
 type ItemController struct {
 	ItemService *svc.ItemService
 }

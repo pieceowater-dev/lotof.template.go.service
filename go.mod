@@ -4,8 +4,7 @@ go 1.23.0
 
 require (
 	github.com/lib/pq v1.10.9
-	github.com/pieceowater-dev/lotof.lib.gossiper v1.0.45
-	gorm.io/driver/postgres v1.5.9
+	github.com/pieceowater-dev/lotof.lib.gossiper v1.1.0
 	gorm.io/gorm v1.25.12
 )
 
@@ -33,4 +32,5 @@ require (
 	golang.org/x/sync v0.8.0 // indirect
 	golang.org/x/sys v0.25.0 // indirect
 	golang.org/x/text v0.18.0 // indirect
+	gorm.io/driver/postgres v1.5.9 // indirect
 )
