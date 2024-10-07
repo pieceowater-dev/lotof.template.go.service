@@ -1,44 +1,24 @@
 package main
 
 import (
-	"application/internal/core/cfg"
-	"application/internal/pkg"
-	"encoding/json"
-	g "github.com/pieceowater-dev/lotof.lib.gossiper"
+	"application/internal"
+	"fmt"
 	"log"
+	"strings"
 )
 
+func init() {
+	caption := "PIECEOWATER DEV"
+	dash10 := strings.Repeat("-", 10)
+	space9 := strings.Repeat(" ", 9)
+	fmt.Println(dash10 + strings.Repeat("-", len(caption)) + dash10)
+	fmt.Println("|" + space9 + caption + space9 + "|")
+	fmt.Println(dash10 + strings.Repeat("-", len(caption)) + dash10)
+}
+
 func main() {
-	defer g.DontPanic()
-
-	app := g.Bootstrap{}
-	err := g.Safely(func() {
-		app.Setup(
-			cfg.GossiperConf,
-			func() any {
-				defer g.DontPanic()
-				log.Println("Binding db...")
-				_ = g.Safely(func() {
-					cfg.SetDB(app.DB.GetDB())
-				})
-				return nil
-			},
-			func(msg []byte) any {
-				defer g.DontPanic()
-
-				var message g.AMQMessage
-				err := json.Unmarshal(msg, &message)
-				if err != nil {
-					log.Println("Failed to unmarshal custom message:", err)
-					return nil
-				}
-				router := pkg.InitRouter()
-				return router.HandleMessageRouter(message)
-			},
-		)
-	})
+	err := internal.Run()
 	if err != nil {
 		log.Fatalf("Application failed during setup: %v", err)
 	}
-
 }
