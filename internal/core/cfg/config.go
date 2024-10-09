@@ -32,7 +32,7 @@ var GossiperConf = g.Config{
 	Database: g.DatabaseConfig{
 		PG: g.DBPGConfig{
 			EnvPostgresDBDSN: "DATABASE_DSN",
-			AutoMigrate:      true,
+			AutoMigrate:      false,
 			Models: []any{
 				// Your models go here
 				// &yourModel{}, // Example: Define the models that will be auto-migrated
